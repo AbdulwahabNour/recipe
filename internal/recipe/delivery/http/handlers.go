@@ -1,6 +1,7 @@
 package http
 
 import (
+	"fmt"
 	"net/http"
 	"time"
 
@@ -40,4 +41,11 @@ func (h *apiHandler) UpdateRecipeHandler(c *gin.Context) {
 	}
 	//sent to service
 	c.JSON(http.StatusOK, []model.Recipe{})
+}
+func (h *apiHandler) DeleteRecipeHandler(c *gin.Context) {
+	id := c.Param("id")
+
+	//sent to service
+
+	c.JSON(http.StatusOK, gin.H{"message": fmt.Sprintf("Recipe with id (%s) has been deleted", id)})
 }
