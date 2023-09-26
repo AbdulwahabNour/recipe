@@ -10,4 +10,5 @@ func RecipeRoutes(r *gin.RouterGroup, handler recipe.Handlers) {
 	r.GET("/recipes", handler.ListRecipeHandler)
 	r.PUT("/recipes", handler.UpdateRecipeHandler)
 	r.DELETE("/recipes/:id", handler.DeleteRecipeHandler)
+	r.GET("/recipes/search", handler.SearchRecipeHandler)
 }

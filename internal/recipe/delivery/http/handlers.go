@@ -49,3 +49,10 @@ func (h *apiHandler) DeleteRecipeHandler(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{"message": fmt.Sprintf("Recipe with id (%s) has been deleted", id)})
 }
+func (h *apiHandler) SearchRecipeHandler(c *gin.Context) {
+	id := c.Query("tags")
+
+	//sent to service
+
+	c.JSON(http.StatusOK, gin.H{"message": []model.Recipe{{ID: id}}})
+}

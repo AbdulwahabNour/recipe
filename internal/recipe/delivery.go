@@ -7,4 +7,5 @@ type Handlers interface {
 	ListRecipeHandler(c *gin.Context)
 	UpdateRecipeHandler(c *gin.Context)
 	DeleteRecipeHandler(c *gin.Context)
+	SearchRecipeHandler(c *gin.Context)
 }
