@@ -28,3 +28,7 @@ func (h *apiHandler) CreateRecipeHandler(c *gin.Context) {
 
 	c.JSON(http.StatusOK, rec)
 }
+func (h *apiHandler) ListRecipeHandler(c *gin.Context) {
+
+	c.JSON(http.StatusOK, []model.Recipe{})
+}

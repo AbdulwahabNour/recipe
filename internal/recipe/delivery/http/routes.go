@@ -7,4 +7,5 @@ import (
 
 func RecipeRoutes(r *gin.RouterGroup, handler recipe.Handlers) {
 	r.POST("/recipes", handler.CreateRecipeHandler)
+	r.GET("/recipes", handler.ListRecipeHandler)
 }
