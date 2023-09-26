@@ -32,3 +32,12 @@ func (h *apiHandler) ListRecipeHandler(c *gin.Context) {
 
 	c.JSON(http.StatusOK, []model.Recipe{})
 }
+func (h *apiHandler) UpdateRecipeHandler(c *gin.Context) {
+	var recipe model.Recipe
+	if err := c.ShouldBindJSON(&recipe); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	//sent to service
+	c.JSON(http.StatusOK, []model.Recipe{})
+}
