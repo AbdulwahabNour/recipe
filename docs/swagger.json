@@ -1,0 +1,157 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "This is a sample recipes Api.",
+        "title": "Recipes API",
+        "contact": {},
+        "version": "1.0"
+    },
+    "host": "localhost:8080",
+    "basePath": "/api/v1",
+    "paths": {
+        "/recipes": {
+            "put": {
+                "description": "Update an existing recipe by providing updated Recipe JSON data. Returns updated recipe upon successful update.",
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Update Recipe",
+                "parameters": [
+                    {
+                        "description": "Updated Recipe JSON",
+                        "name": "Recipe",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.Recipe"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/model.Recipe"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Create a new recipe by providing Recipe JSON data and store it in the database. Returns the saved recipe as JSON.",
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Create a New Recipe",
+                "parameters": [
+                    {
+                        "description": "Recipe JSON",
+                        "name": "Recipe",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.Recipe"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/model.Recipe"
+                        }
+                    }
+                }
+            }
+        },
+        "/recipes/search": {
+            "get": {
+                "description": "Search for recipes based on specified tags. Returns a list of matching recipes.",
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Search Recipes",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Comma-separated list of tags for filtering",
+                        "name": "tags",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/model.Recipe"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/recipes/{id}": {
+            "delete": {
+                "description": "Delete a recipe by providing its unique identifier (ID). Returns a confirmation message upon successful deletion.",
+                "produces": [
+                    "application/json"
+                ],
+                "summary": "Delete Recipe",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Recipe ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "model.Recipe": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string"
+                },
+                "ingredients": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "instructions": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "name": {
+                    "type": "string"
+                },
+                "publishedAt": {
+                    "type": "string"
+                },
+                "tags": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        }
+    }
+}
