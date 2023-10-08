@@ -1,4 +1,3 @@
-basePath: /api/v1
 definitions:
   model.Recipe:
     properties:
@@ -21,14 +20,45 @@ definitions:
           type: string
         type: array
     type: object
-host: localhost:8080
+  model.RecipeForm:
+    properties:
+      ingredients:
+        items:
+          type: string
+        type: array
+      instructions:
+        items:
+          type: string
+        type: array
+      name:
+        type: string
+      tags:
+        items:
+          type: string
+        type: array
+    type: object
 info:
   contact: {}
-  description: This is a sample recipes Api.
-  title: Recipes API
-  version: "1.0"
 paths:
   /recipes:
+    get:
+      description: List recipes.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/model.Recipe'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: List all Recipes
     post:
       description: Create a new recipe by providing Recipe JSON data and store it
         in the database. Returns the saved recipe as JSON.
@@ -38,7 +68,7 @@ paths:
         name: Recipe
         required: true
         schema:
-          $ref: '#/definitions/model.Recipe'
+          $ref: '#/definitions/model.RecipeForm'
       produces:
       - application/json
       responses:
@@ -46,6 +76,18 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/model.Recipe'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
       summary: Create a New Recipe
     put:
       description: Update an existing recipe by providing updated Recipe JSON data.
@@ -63,7 +105,21 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/model.Recipe'
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
       summary: Update Recipe
   /recipes/{id}:
     delete:
@@ -81,7 +137,14 @@ paths:
         "200":
           description: OK
           schema:
-            additionalProperties: true
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
             type: object
       summary: Delete Recipe
   /recipes/search:
@@ -103,5 +166,11 @@ paths:
             items:
               $ref: '#/definitions/model.Recipe'
             type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
       summary: Search Recipes
 swagger: "2.0"
