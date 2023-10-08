@@ -40,9 +40,9 @@ func (r *recipeRepo) ListAllRecipes(ctx context.Context) ([]*model.Recipe, error
 	defer cur.Close(ctx)
 
 	for cur.Next(ctx) {
-		var recipe *model.Recipe
-		cur.Decode(recipe)
-		recipes = append(recipes, recipe)
+		var recipe model.Recipe
+		cur.Decode(&recipe)
+		recipes = append(recipes, &recipe)
 	}
 
 	if err := cur.Err(); err != nil {
@@ -72,7 +72,7 @@ func (r *recipeRepo) UpdateRecipe(ctx context.Context, recipe *model.Recipe) err
 
 	if result.ModifiedCount == 0 {
 
-		return fmt.Errorf("No documents were updated.")
+		return fmt.Errorf("no documents were updated")
 	}
 
 	return nil
@@ -90,13 +90,15 @@ func (r *recipeRepo) DeleteRecipe(ctx context.Context, id string) error {
 	}
 	if result.DeletedCount == 0 {
 
-		return fmt.Errorf("No documents were deleted.")
+		return fmt.Errorf("no documents were deleted")
 	}
 
 	return nil
 }
 func (r *recipeRepo) SearchRecipe(ctx context.Context, tags []string) ([]*model.Recipe, error) {
-	filter := bson.M{"tags": bson.M{"$all": tags}}
+
+	//filter := bson.M{"tags": bson.M{"$all": tags}}
+	filter := bson.D{{"tags", bson.D{{"$all", tags}}}}
 	cur, err := r.collection.Find(ctx, filter)
 	if err != nil {
 		return nil, err
@@ -104,9 +106,9 @@ func (r *recipeRepo) SearchRecipe(ctx context.Context, tags []string) ([]*model.
 	defer cur.Close(ctx)
 	recipes := make([]*model.Recipe, 0)
 	for cur.Next(ctx) {
-		var recipe *model.Recipe
-		cur.Decode(recipe)
-		recipes = append(recipes, recipe)
+		var recipe model.Recipe
+		cur.Decode(&recipe)
+		recipes = append(recipes, &recipe)
 	}
 
 	if err := cur.Err(); err != nil {

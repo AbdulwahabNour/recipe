@@ -11,24 +11,13 @@ import (
 
 	"github.com/AbdulwahabNour/recipe/docs"
 	recipeHandlers "github.com/AbdulwahabNour/recipe/internal/recipe/delivery/http"
+	recipeRepository "github.com/AbdulwahabNour/recipe/internal/recipe/repo/mongo"
+	recipeService "github.com/AbdulwahabNour/recipe/internal/recipe/service"
 	"github.com/gin-gonic/gin"
 	swaggerfiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 	"go.mongodb.org/mongo-driver/mongo"
-	"go.mongodb.org/mongo-driver/mongo/options"
-	"go.mongodb.org/mongo-driver/mongo/readpref"
 )
-
-func init() {
-
-	ctx := context.Background()
-	client, err := mongo.Connect(ctx, options.Client().ApplyURI(os.Getenv("MONGO_URI")))
-	if err = client.Ping(context.TODO(),
-		readpref.Primary()); err != nil {
-		log.Fatal(err)
-	}
-	log.Println("Connected to MongoDB")
-}
 
 const (
 	maxHeaderBytes = 1 << 20 //1MB
@@ -36,20 +25,24 @@ const (
 
 type server struct {
 	ginEngin *gin.Engine
+	mongoDB  *mongo.Database
 }
 
-func NewServer() *server {
+func NewServer(mongodb *mongo.Database) *server {
 	return &server{
 		ginEngin: gin.New(),
+		mongoDB:  mongodb,
 	}
 }
 
 func (s *server) MapHandler() error {
-
 	docs.SwaggerInfo.BasePath = "/api/v1"
 	s.ginEngin.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
+	dbCollection := s.mongoDB.Collection("recipe")
 
-	recipeHandler := recipeHandlers.NewRecipeHandler()
+	recipeRepo := recipeRepository.NewRecipeRepo(dbCollection)
+	recipeServ := recipeService.NewRecipeService(recipeRepo)
+	recipeHandler := recipeHandlers.NewRecipeHandler(recipeServ)
 
 	v1 := s.ginEngin.Group("/api/v1")
 	recipeHandlers.RecipeRoutes(v1, recipeHandler)
