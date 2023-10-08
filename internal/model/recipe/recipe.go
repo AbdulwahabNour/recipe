@@ -14,3 +14,19 @@ type Recipe struct {
 	Instructions []string           `json:"instructions" `
 	PublishedAt  time.Time          `json:"publishedAt" `
 }
+
+type RecipeForm struct {
+	Name         string   `json:"name" `
+	Tags         []string `json:"tags" `
+	Ingredients  []string `json:"ingredients" `
+	Instructions []string `json:"instructions" `
+}
+
+func (r RecipeForm) ToRecipe() *Recipe {
+	return &Recipe{
+		Name:         r.Name,
+		Tags:         r.Tags,
+		Ingredients:  r.Ingredients,
+		Instructions: r.Instructions,
+	}
+}
